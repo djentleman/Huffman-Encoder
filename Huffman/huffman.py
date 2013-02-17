@@ -89,25 +89,26 @@ class Node():
         print("-------------------")
 
     def huffmanSearch(self, search, code):
+        
         if self.char == search:
             print(self.char + " = " + code)
             return code
+        
+        
         if self.leftNode != None:
             code = code + "1"
-            self.leftNode.huffmanSearch(search, code)
-        code = removeLastChar(code)
+            codeToReturn = self.leftNode.huffmanSearch(search, code)
+            # pop codeToReturn out
+            
+        code = removeLastChar(code) # 'goes back up a node'
+        
         if self.rightNode != None:
             code = code + "0"
-            self.rightNode.huffmanSearch(search, code)
-
-
- 
+            codeToReturn = self.rightNode.huffmanSearch(search, code)
+            # pop codeToReturn out
 
 
         
-
-        
-                
 
 
 class HuffmanTree():
@@ -285,19 +286,9 @@ def contsructTree(characterList, tree):
         newBranch = tree # current root node will now be a branch
 
         if tree == None:
-            if charA == None:        
-                nodeA = newBranch
-                nodeB = Node(valueB, charB, None, None)
-            else:
-                nodeA = Node(valueA, charA, None, None)
-                nodeB = Node(valueB, charB, None, None)
-                
-            if charB == None:
-                nodeA = Node(valueA, charA, None, None)
-                nodeB = newBranch
-            else:
-                nodeA = Node(valueA, charA, None, None)
-                nodeB = Node(valueB, charB, None, None)
+            
+            nodeA = Node(valueA, charA, None, None)
+            nodeB = Node(valueB, charB, None, None)
                 
             rootNode = Node(product, None, nodeA, nodeB)
             
@@ -340,31 +331,15 @@ def main():
     
     characterList = generateCharacterList(charList)# get list of character frequencies
 
-    tree = contsructTree(characterList, None)
+    tree = contsructTree(characterList, None) # generate tree
 
-    huffman = HuffmanTree(tree) # generate tree
+    huffman = HuffmanTree(tree) 
 
-    #huffman.preOrder()
-
-    for charac in characterList:
-        huffman.huffmanSearch(charac.char)
+    for charac in characterList: # traverse tree
+        code = huffman.huffmanSearch(charac.char) # generate codes
+        #print(code)
     
-
-    #print(huffman.huffmanSearch("d"))
-    #huffman.printOut()
-
     
-
-    ##for charac in characterList:
-    ##    charac.printOut()
-
-    ##print("-------------------")
-    
-    ##huffman.printOut()
-
-    # traverse tree
-
-    # generate codes
 
     # encode text
 
