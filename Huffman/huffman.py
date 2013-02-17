@@ -87,6 +87,31 @@ class Node():
         print("Value: ", self.value)
         print("Char: ", self.char)
         print("-------------------")
+
+    def huffmanSearch(self, search, code):
+        #print(code)
+        #print(self.char)
+        if search == self.char:
+            print(self.char + " = " + code)
+            return code
+        if self.rightNode != None:
+            code = code + "1"
+            self.rightNode.huffmanSearch(search, code)
+        if self.leftNode != None:
+            code = code + "0"
+            self.leftNode.huffmanSearch(search, code)
+
+
+
+            
+
+
+ 
+
+
+        
+
+        
                 
 
 
@@ -109,6 +134,9 @@ class HuffmanTree():
     def postOrder(self):
         print("Pre Order Traversal")
         self.rootNode.postOrder()
+
+    def huffmanSearch(self, search):
+        return self.rootNode.huffmanSearch(search, "")
     
     
 def readText():
@@ -312,7 +340,13 @@ def main():
 
     huffman = HuffmanTree(tree) # generate tree
 
-    huffman.preOrder()
+    #huffman.preOrder()
+
+    for charac in characterList:
+        huffman.huffmanSearch(charac.char)
+    
+
+    #print(huffman.huffmanSearch("d"))
     #huffman.printOut()
 
     
