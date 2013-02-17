@@ -27,7 +27,7 @@ class Character():
     def printOut(self):
         print("-----Print Out-----")
         print("Char: " + self.char)
-        print("Frequency: " + str(self.frequency))
+        print("Frequency: ", self.frequency)
         print("Code: " + self.code)
         
 class Node():
@@ -35,17 +35,37 @@ class Node():
     # frequency & char are Character attributes
 
     def __init__(self, value, char, leftNode, rightNode):
-        # no char input ("") = product = not leaf
+        # no char input (None) = product = not leaf
         self.value = value
         self.char = char
         self.leftNode = leftNode
         self.rightNode = rightNode
+
+    def printOut(self):
+        print("Node Value: ", self.value)
+        if self.char == None:
+            print("Node Char: ", None)
+        else:
+            print("Node Char: ", self.char)
+        print("Children:")
+        if self.leftNode == None:
+            print("    Left Child (0):", None)
+        else:
+            print("    Left Child (0):", self.leftNode.printOut())
+        if self.rightNode == None:
+            print("    Right Child (1):", None)
+        else:
+            print("    Right Child (1):", self.rightNode.printOut())
+                
 
 
 class HuffmanTree():
     # only one none is needed, as that node refrences the rest of the tree
     def __init__(self, rootNode):
         self.rootNode = rootNode
+
+    def printOut(self):
+        self.rootNode.printOut()
     
     
 def readText():
@@ -90,8 +110,8 @@ def generateCharacterList(charList):
 
     
           
-    for charac in characterList:
-        charac.printOut()
+    #for charac in characterList:
+        #charac.printOut()
 
     return characterList
         
@@ -101,13 +121,15 @@ def getLowestVal(tempList):
     lowestVal = 99999
     
     for charac in tempList: # get tupleValA
+
+
         
-        if type(charac == Character):
+        if type(charac) == Character:
             if charac.getFrequency() < lowestVal:
                 lowestVal = charac.getFrequency()
                 charToRemove = charac
                 
-        elif type(charac == int):
+        elif type(charac) == int:
             if charac < lowestVal:
                 lowestVal = charac
                 charToRemove = charac
@@ -122,10 +144,12 @@ def removeCharac(charToRemove, tempList):
 
     return newList
 
-def contructTree(characterList, tree):
+def contsructTree(characterList, tree):
 
-    if characterList == []: ## clause will need to change
+    if len(characterList) == 1:
         if tree != None:
+            print(characterList)
+            print(tree)
             return tree
     else:
     
@@ -163,23 +187,52 @@ def contructTree(characterList, tree):
             charA = lowItemA.char
         else:
             valueA = lowItemA
-            charA = ""
+            charA = None
 
         if type(lowItemB) == Character:
             valueB = lowItemB.frequency
             charB = lowItemB.char
         else:
             valueB = lowItemB
-            charB = ""
+            charB = None
 
         # get product
 
-        productValue = valueA + valueB
+        product = valueA + valueB
         
 
-        print (valueA, charA)
-        print (valueB, charB)
-        print ("product: ", productValue)
+        #print (valueA, charA)
+        #print (valueB, charB)
+        #print ("product: ", product)
+
+        tempList.append(product) # add product to tempList
+
+        newBranch = tree # current root node will now be a branch
+
+        
+        if charA == None:        
+            nodeA = newBranch
+            nodeB = Node(valueB, charB, None, None)
+        else:
+            nodeA = Node(valueA, charA, None, None)
+            nodeB = Node(valueB, charB, None, None)
+            
+        if charB == None:
+            nodeA = Node(valueA, charA, None, None)
+            nodeB = newBranch
+        else:
+            nodeA = Node(valueA, charA, None, None)
+            nodeB = Node(valueB, charB, None, None)
+            
+            
+        rootNode = Node(product, None, nodeA, nodeB)
+
+
+        
+
+        # recurse:
+
+        return contsructTree(tempList, rootNode)
             
 
 
@@ -189,11 +242,16 @@ def main():
     
     characterList = generateCharacterList(charList)# get list of character frequencies
 
-    huffmanTree = contructTree(characterList, None)
+    tree = contsructTree(characterList, None)
 
+    huffman = HuffmanTree(tree) # generate tree
+
+    for charac in characterList:
+        charac.printOut()
+
+    print("-------------------")
     
-
-    # generate tree
+    huffman.printOut()
 
     # traverse tree
 
