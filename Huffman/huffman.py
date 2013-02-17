@@ -89,21 +89,16 @@ class Node():
         print("-------------------")
 
     def huffmanSearch(self, search, code):
-        #print(code)
-        #print(self.char)
-        if search == self.char:
+        if self.char == search:
             print(self.char + " = " + code)
             return code
-        if self.rightNode != None:
-            code = code + "1"
-            self.rightNode.huffmanSearch(search, code)
         if self.leftNode != None:
-            code = code + "0"
+            code = code + "1"
             self.leftNode.huffmanSearch(search, code)
-
-
-
-            
+        code = removeLastChar(code)
+        if self.rightNode != None:
+            code = code + "0"
+            self.rightNode.huffmanSearch(search, code)
 
 
  
@@ -137,6 +132,15 @@ class HuffmanTree():
 
     def huffmanSearch(self, search):
         return self.rootNode.huffmanSearch(search, "")
+
+def removeLastChar(string):
+    newStr = ""
+    for i in range(len(string)):
+        if i != (len(string) - 1):
+            newStr = newStr + string[i]
+    return newStr
+            
+        
     
     
 def readText():
