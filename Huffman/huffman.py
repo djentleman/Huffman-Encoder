@@ -56,16 +56,59 @@ class Node():
             print("    Right Child (1):", None)
         else:
             print("    Right Child (1):", self.rightNode.printOut())
+
+
+    def inOrder(self):
+        if self.leftNode != None:
+            self.leftNode.inOrder()
+        print("-------------------")
+        print("Value: ", self.value)
+        print("Char: ", self.char)
+        print("-------------------")
+        if self.rightNode != None:
+            self.rightNode.inOrder()
+
+    def preOrder(self):
+        print("-------------------")
+        print("Value: ", self.value)
+        print("Char: ", self.char)
+        print("-------------------")
+        if self.leftNode != None:
+            self.leftNode.preOrder()
+        if self.rightNode != None:
+            self.rightNode.preOrder()
+
+    def postOrder(self):
+        if self.leftNode != None:
+            self.leftNode.postOrder()
+        if self.rightNode != None:
+            self.rightNode.postOrder()
+        print("-------------------")
+        print("Value: ", self.value)
+        print("Char: ", self.char)
+        print("-------------------")
                 
 
 
 class HuffmanTree():
-    # only one none is needed, as that node refrences the rest of the tree
+    # only one node is needed, as that node refrences the rest of the tree
     def __init__(self, rootNode):
         self.rootNode = rootNode
 
     def printOut(self):
         self.rootNode.printOut()
+
+    def inOrder(self):
+        print("In Order Traversal")
+        self.rootNode.inOrder()
+
+    def preOrder(self):
+        print("Pre Order Traversal")
+        self.rootNode.preOrder()
+
+    def postOrder(self):
+        print("Pre Order Traversal")
+        self.rootNode.postOrder()
     
     
 def readText():
@@ -148,8 +191,8 @@ def contsructTree(characterList, tree):
 
     if len(characterList) == 1:
         if tree != None:
-            print(characterList)
-            print(tree)
+            ##print(characterList)
+            ##print(tree)
             return tree
     else:
     
@@ -209,23 +252,46 @@ def contsructTree(characterList, tree):
 
         newBranch = tree # current root node will now be a branch
 
-        
-        if charA == None:        
-            nodeA = newBranch
-            nodeB = Node(valueB, charB, None, None)
+        if tree == None:
+            if charA == None:        
+                nodeA = newBranch
+                nodeB = Node(valueB, charB, None, None)
+            else:
+                nodeA = Node(valueA, charA, None, None)
+                nodeB = Node(valueB, charB, None, None)
+                
+            if charB == None:
+                nodeA = Node(valueA, charA, None, None)
+                nodeB = newBranch
+            else:
+                nodeA = Node(valueA, charA, None, None)
+                nodeB = Node(valueB, charB, None, None)
+                
+            rootNode = Node(product, None, nodeA, nodeB)
+            
         else:
-            nodeA = Node(valueA, charA, None, None)
-            nodeB = Node(valueB, charB, None, None)
+            if charA == None:        
+                nodeA = newBranch
+                nodeB = Node(valueB, charB, None, None)
+                rootNode = Node(product, None, nodeA, nodeB)
+            elif charB == None:
+                nodeA = Node(valueA, charA, None, None)
+                nodeB = newBranch
+                rootNode = Node(product, None, nodeA, nodeB)
+            else:
+                nodeA = Node(valueA, charA, None, None)
+                nodeB = Node(valueB, charB, None, None)
+                newBranch2 = Node(product, None, nodeA, nodeB)
+
+                newProduct = product + newBranch.value
+                tempList.append(newProduct)
+                tempList = removeCharac(product, tempList)
+
+                rootNode = Node(newProduct, None, newBranch, newBranch2)
+                
             
-        if charB == None:
-            nodeA = Node(valueA, charA, None, None)
-            nodeB = newBranch
-        else:
-            nodeA = Node(valueA, charA, None, None)
-            nodeB = Node(valueB, charB, None, None)
             
-            
-        rootNode = Node(product, None, nodeA, nodeB)
+
 
 
         
@@ -246,12 +312,17 @@ def main():
 
     huffman = HuffmanTree(tree) # generate tree
 
-    for charac in characterList:
-        charac.printOut()
+    huffman.preOrder()
+    #huffman.printOut()
 
-    print("-------------------")
     
-    huffman.printOut()
+
+    ##for charac in characterList:
+    ##    charac.printOut()
+
+    ##print("-------------------")
+    
+    ##huffman.printOut()
 
     # traverse tree
 
