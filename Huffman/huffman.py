@@ -344,6 +344,7 @@ def saveEncodedFile(encodedStr):
 def finalPrintout():
     originalFile = open("data.txt", "r")
     text = originalFile.read()
+    originalSize = len(text) * 256
     print("Original Text: " + text)
     print("Size: " + str(len(text) * 256) + " Bytes")
 
@@ -351,9 +352,15 @@ def finalPrintout():
 
     encodedFile = open("encodedString.txt", "r")
     huffmanText = encodedFile.read()
+    compressionSize = len(huffmanText)
     print("Compressed Text: " + huffmanText)
     print("Size: " + str(len(huffmanText)) + " Bytes")
     encodedFile.close()
+
+    compressionRatio = originalSize / compressionSize
+    compressionRatio = int(compressionRatio)
+
+    print("Compression Ratio: " + str(compressionRatio) + ":1")
 
 def main():
     charList = readText()# read text
