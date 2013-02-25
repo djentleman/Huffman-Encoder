@@ -91,8 +91,16 @@ class Node():
     def huffmanSearch(self, search, code):
         
         if self.char == search:
-            print(self.char + " = " + code)
-            return code
+            #print(self.char + " = " + code)
+            
+            # save to temp file
+
+            outFile = open("temp.txt", "w")
+            outFile.write(code)
+            outFile.close()
+
+
+            #return code
         
         
         if self.leftNode != None:
@@ -132,7 +140,7 @@ class HuffmanTree():
         self.rootNode.postOrder()
 
     def huffmanSearch(self, search):
-        return self.rootNode.huffmanSearch(search, "")
+        self.rootNode.huffmanSearch(search, "")
 
 def removeLastChar(string):
     newStr = ""
@@ -158,7 +166,9 @@ def readText():
 
         #charList is a list of all chars
 
-        return charList                    
+        return charList
+
+        inFile.close()
                     
     except (Exception):
         print("error: file not found")
@@ -325,6 +335,25 @@ def contsructTree(characterList, tree):
             
 
 
+def saveEncodedFile(encodedStr):
+    outFile = open("encodedString.txt", "w")
+    outFile.write(encodedStr)
+    outFile.close()
+
+
+def finalPrintout():
+    originalFile = open("data.txt", "r")
+    text = originalFile.read()
+    print("Original Text: " + text)
+    print("Size: " + str(len(text) * 256) + " Bytes")
+
+    originalFile.close()
+
+    encodedFile = open("encodedString.txt", "r")
+    huffmanText = encodedFile.read()
+    print("Compressed Text: " + huffmanText)
+    print("Size: " + str(len(huffmanText)) + " Bytes")
+    encodedFile.close()
 
 def main():
     charList = readText()# read text
@@ -333,14 +362,42 @@ def main():
 
     tree = contsructTree(characterList, None) # generate tree
 
-    huffman = HuffmanTree(tree) 
+    huffman = HuffmanTree(tree)
+
+    # ---------------------------------------------------
 
     for charac in characterList: # traverse tree
-        code = huffman.huffmanSearch(charac.char) # generate codes
-        #print(code)
-    
+        huffman.huffmanSearch(charac.char) # generate codes
+
+
+        inFile = open("temp.txt", "r")
+        code = inFile.read()
+
+        charac.code = code
+        #charac.printOut() # debug
+
+        inFile.close()
+
+    # --------------------------------------------------
     
 
-    # encode text
+    encodedStr = ""
+
+    for ch in charList: # loop through string
+        for charac in characterList: # loop through characters
+            # lol terrible time effic
+            if ch == charac.char:
+                encodedStr += str(charac.code)     # encode text
+                
+    #print(encodedStr)
+
+    # -------------------------------------------------
+
+    saveEncodedFile(encodedStr) # saves encoded string to file
+
+    finalPrintout() # displays original string & huffman code on console
+
+        
+
 
 main()
