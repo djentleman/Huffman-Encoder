@@ -1,6 +1,6 @@
 # Huffman Tree Encoder
 
-
+import time
 
 class Character():
 
@@ -363,6 +363,8 @@ def finalPrintout():
     print("Compression Ratio: " + str(compressionRatio) + ":1")
 
 def main():
+    start = time.clock()
+    
     charList = readText()# read text
     
     characterList = generateCharacterList(charList)# get list of character frequencies
@@ -403,6 +405,9 @@ def main():
     saveEncodedFile(encodedStr) # saves encoded string to file
 
     finalPrintout() # displays original string & huffman code on console
+
+    elapsed = (time.clock() - start)
+    print("Computation Time: " + str(elapsed) + "ms")
 
         
 
